@@ -20,7 +20,13 @@ class VAE_Encoder(nn.Sequential):
             VAE_ResidualBlock(512,512),
             VAE_ResidualBlock(512,512),
             VAE_ResidualBlock(512,512),
-            VAE_AttentionBlock
+            VAE_AttentionBlock(512),
+            VAE_ResidualBlock(512,512),
+            nn.GroupNorm(32,512),
+            nn.SiLU(32,512),
+            nn.Conv2d(512,8,kernel_size=3,padding=1),
+            nn.Conv2d(512,8,kernel_size=3,padding=0)
+
             
             
             
