@@ -27,3 +27,9 @@ class SelfAttention(nn.Module):
         weight=F.softmax(weight,dim=-1)
         output=weight@v
         ouutput=output.transpose(1,2)
+        output=output.reshape(input_shape)
+        output=self.out_proj(output)
+        return output
+
+
+print("Hello")
