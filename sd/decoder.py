@@ -77,10 +77,12 @@ class VAE_Decoder(nn.Sequential):
 
 
         )
-        def forward(self,x:torch:Tensor)->torch.Tensor:
+        def forward(self,x:torch.Tensor)->torch.Tensor:
+        
+
             x/=0.18215
             for module in self:
                 x=module(x)
-            return x
+            return x 
 
         
