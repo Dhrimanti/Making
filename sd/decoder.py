@@ -57,7 +57,7 @@ class VAE_Decoder(nn.Sequential):
             VAE_ResidualBlock(512,512),
             nn.Upsample(scale_factor=2),
             nn.Conv2d(512,512,kernel_size=3,padding=1),
-             VAE_ResidualBlock(512,512),
+            VAE_ResidualBlock(512,512),
             VAE_ResidualBlock(512,512),
             VAE_ResidualBlock(512,512),
             nn.Upsample(scale_factor=2),
