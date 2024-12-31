@@ -15,6 +15,15 @@ class TimeEmbedding(nn.Module):
         x=self.linear_2(x)
         return x
 
+class Upsample(nn.Module):
+    def__init__(self,channels:int):
+    super().__init__()
+    self.conv=nn.Conv2d(channels,channels,kernel_size=3,padding=1)
+    def forward(self,x):
+        x=F.interpolate(x,scale_factor=2,mode='nearest')
+        x=self.conv(x)
+        return x
+
 class SwitchSequential(nn.Sequential):
     def forward(self,x:torch.Tensor,context:torch.Tensor,time:torch.Tensor)->torch.Tensor:
         for layer in self:
@@ -25,6 +34,9 @@ class SwitchSequential(nn.Sequential):
             else:
                 x=layer(x)
         return x
+
+
+
 class UNET(nn.Module):
     def __init__(self):
         self.encoders=nn.Module([
@@ -71,7 +83,7 @@ class Diffusion(nn.Module):
     self.final=UNET_OutputLayer()
     def forward(self,latent:torch.Tensor,context:torch.Tensor,time:torch.Tensor):
         time=self.time_embedding(time)
-        output=self.unet.(latent,context,time)
+        output=self.unet(latent,context,time)
         output=self.final(output)
         return output
 
