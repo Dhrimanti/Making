@@ -74,7 +74,8 @@ class UNET_AttentionBlock(NN.Module):
         x=self.linear_geglu_2(x)
         x+=residue_short
         x=x.transpose(-1,-2)
-        
+        x=x.view((n,c,h,w))
+        return self.conv_output(x)+residue_long
 
 
 class Upsample(nn.Module):
