@@ -1,6 +1,6 @@
 import torch 
 from torch import nn
-from troch.nn import functional as F
+from torch.nn import functional as F
 from attention import SelfAttention,CrossAttention
 
 
@@ -40,7 +40,7 @@ class UNET_ResidualBlock(nn.Module):
         merged=self.conv_merged(merged)
         return merged+self.residual_layer(residue)
 
-class UNET_AttentionBlock(NN.Module):
+class UNET_AttentionBlock(nn.Module):
     def __init__(self,n_head:int,n_embed:int,d_context=768):
         super().__init__()
         channels=n_head*n_embed
@@ -78,14 +78,15 @@ class UNET_AttentionBlock(NN.Module):
         return self.conv_output(x)+residue_long
 
 
+
 class Upsample(nn.Module):
-    def__init__(self,channels:int):
-    super().__init__()
-    self.conv=nn.Conv2d(channels,channels,kernel_size=3,padding=1)
+    def __init__(self, channels):
+        super().__init__()
+        self.conv=nn.Conv2d(channels,channels,kernel_size=3,padding=1)
     def forward(self,x):
         x=F.interpolate(x,scale_factor=2,mode='nearest')
-        x=self.conv(x)
-        return x
+        return self.conv(x)
+
 
 class SwitchSequential(nn.Sequential):
     def forward(self,x:torch.Tensor,context:torch.Tensor,time:torch.Tensor)->torch.Tensor:
