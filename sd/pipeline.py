@@ -61,4 +61,18 @@ n_inference_steps=50,models={},seed=None,device=None,tokenizer=None):
             to_idle(encoder)
         else:
             latents=torch.randn(latents_shape,generator=generator,device=device)
-            
+
+        diffusion=models["diffusion"]
+        diffusion.to(device)
+        timesteps=tqdm(sampler.timesteps)
+        for i,timestep in enumerate(timesteps):
+            time_embedding=get_time_embedding(timestep).to(device)
+            model_input=latents
+            if do_cfg:
+                model_input=model_input.repeat(2,1,1,1)
+            model_output=diffusion(model_input,context,time_embedding)
+            if do_cfg:
+                output_cond,output_uncond=model_output.chunk(2)
+                model_output=cfg_scale*(output_cond-output_uncond)+output_uncond
+                
+        samples=diffusion(latents,timesteps=sampler.timesteps)
