@@ -35,7 +35,17 @@ class SwitchSequential(nn.Sequential):
                 x=layer(x)
         return x
 
-
+class UNET_OutputLayer(nn.Module):
+    def __init__(self,in_channels:int,out_channels:int):
+        super().__init__()
+        self.groupnorm=nn.GroupNorm(32,in_channels)
+        self.conv=nn.Conv2d(int_channels,out_channels,kernel_size=3,padding=1)
+    def forward(self,x):
+        x=self.groupnorm(x)
+        x=F.silu(x)
+        x=self.conv(x)
+        
+        return x
 
 class UNET(nn.Module):
     def __init__(self):
